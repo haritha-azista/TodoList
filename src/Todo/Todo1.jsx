@@ -56,6 +56,10 @@ const Todo1 = () => {
   setTodos(newArray);
   }
   const editTodo = (tid, newTask)=>{
+      if(newTask===""){
+        alert("can't be empty")
+        return
+      }
       const newDos = todos.map((todo)=>
       todo.id===tid?{...todo,title:newTask}:todo);
       setTodos(newDos)
@@ -67,6 +71,12 @@ const Todo1 = () => {
   const showCompleted = () => {
     setShowAll(false);
   };
+  const toggle = (id) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(newTodos);
+  };
 
   const filteredTodos = showAll ? todos : todos.filter((todo) => todo.completed);
 
@@ -74,6 +84,8 @@ const Todo1 = () => {
   return (
     <div>
        <h1 id='todoHeading'>Todo list</h1>
+      
+       <div id='tableContainer'>
        <div className='btnGrp'>
         <button
           className="btn btn-primary"
@@ -90,7 +102,6 @@ const Todo1 = () => {
           Show Completed Tasks
         </button>
       </div>
-       <div id='tableContainer'>
        <div class="input-group mb-3">
       <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
          onChange={(e)=>
@@ -119,12 +130,26 @@ const Todo1 = () => {
              
             <tr key={id}>  
               <td>{id}</td>
-              <td>{title}</td>
-              <td>{ completed ?<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked/>:
+              <td>
+                <span className={completed ? 'completed-task' : ''}>{title}</span>
+              </td>
+              {/* <td>{ completed ?<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"/>:
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"/>
                             
                             }
-              </td>
+              </td> */}
+              <td>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    checked={completed}
+                    onChange={() => {
+                      toggle(id);
+                    }}
+                  />
+                </td>
+              {/* <td>{completed ? "true": "false"}</td> */}
               <td><button class="btn btn-secondary" type="button" 
               onClick={()=>{ const task = window.prompt("");
                {
